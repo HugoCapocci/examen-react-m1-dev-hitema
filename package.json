@@ -7,16 +7,23 @@
     "@types/node": "12.0.0",
     "@types/react": "16.8.16",
     "@types/react-dom": "16.8.4",
+    "express": "^4.16.4",
+    "express-favicon": "^2.0.1",
+    "path": "^0.12.7",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-redux": "^7.0.3",
     "react-scripts": "3.0.0",
+    "redux": "^4.0.1",
     "typescript": "3.4.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start:dev": "react-scripts start",
+    "start": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "GENERATE_SOURCEMAP=false react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -32,5 +39,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-redux": "^7.0.8"
   }
 }

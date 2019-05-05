@@ -1,24 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
+import Timer from './components/Timer';
+import Controls from './components/Controls';
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="container mt-5">
+        <div className="d-flex flex-row align-items-center">
+          <div className="col-md-4 mx-auto">
+            <i className="fas fa-hourglass-half fa-10x"></i>
+          </div>
+          <div className="col-md-4 mx-auto">
+            <Timer />
+          </div>
+          <div className="col-md-4 mx-auto">
+            <Controls />
+          </div>
+        </div>
+    </div>
     </div>
   );
 }

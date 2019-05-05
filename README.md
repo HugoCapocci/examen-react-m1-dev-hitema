@@ -1,44 +1,48 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Examen React M1-Dev Hitema : Timer App (Countdown)
+==================================================
 
-## Available Scripts
+Méthode à suivre :
+------------------
+  * Forkez ce repository
+  * Clonez **votre** repository forké (N'oubliez pas de faire `npm install` après...)
+  * Créez votre branche (`git checkout -b prenom-nom`) de travail
+  * Faites régulièrement des commits
+  * Pusher votre branche puis créez une Pull Request (n'attendez pas la fin !)
 
-In the project directory, you can run:
+Supports :
+----------
 
-### `npm start`
+=> Support React : https://docs.google.com/presentation/d/1sI-mokDbh27AXUhPBrmrdnbtRhfeayUHzVmu3Ki0RHY/edit?usp=sharing
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+=> Support TypeScript : https://docs.google.com/presentation/d/1TFGp_eKQyYPtpO18ROCeszZi6z0CqqFPgvnxIY50InA/edit?usp=sharing
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Consignes :
+-----------
 
-### `npm test`
+=> **Résultat final attendu** : https://react-m1-dev-hitema.herokuapp.com/
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Dans le composant Timer, Implémenter les méthodes onInputChange & onBlur, permettant de saisir le décompte des heures, minutes et secondes
+  * Seuls des chiffres peuvent être saisis
+  * Si on ne saisit qu'un chiffre, il doit être préfixé d'un zéro
+  * Le compteur d'heures ne peut pas être supérieur à 99
+  * Le compteur de minutes ou de secondes ne peut pas être supérieur à 59
 
-### `npm run build`
+> 'blur' est l'inverse du focus. L'événement est déclenché lorsque l'utilisateur quitte l'élément
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Actions redux :
+  * Dans le fichier `actions/timer-actions.ts`, créer les méthodes d'actions, en utilisant les types définis dans le fichier `action-types/timer-action-types.ts`
+  * Dans le composant Controls:
+    * Gérer les condition d'affichage des différents butons autres que le bouton START (STOP, PAUSE, RESUME) en fonction du *status* (this.props.status)
+    * Mapper les **actions** sur les différents boutons
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+3. Store
+  * Connecter l'application au store
+  * Implémenter la fonction reducer dans le store
+  * Connecter le Composant Timer au store, pour récupérer le status. Noralement, le bouton 'START' devrait alors déclencer le timer, si un temps a été saisi.
+  * Quand le timer du composant Timer est terminé, il faut changer l'état du store.
+  * Gérer également le cas ou on appuie sur START mais que aucun temps n'a été saisi.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+BONUS
+-----
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+ *  Remplacer l'icone en forme de sablier par un Composant affichant une icone différente selon l'état du store.

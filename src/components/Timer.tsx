@@ -1,8 +1,16 @@
 import React, { Component, FormEvent } from 'react';
-
+import { ReduxState } from '../store';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { TimerActionTypes } from '../action-types/timer-action-types';
+import { stopTimer } from '../actions/timer-actions';
 import Display from './Display';
 
 export type UnitOfTime = 'hours' | 'minutes' | 'seconds';
+
+export interface TimerProps {
+
+}
 
 export interface TimeState {
   hours: string;
@@ -23,7 +31,7 @@ interface StateProps {
 
 type Props = DispatchProps & StateProps;
 
-class Timer extends Component<{}, TimeState> {
+class Timer extends Component<Props, TimeState, TimerProps> {
   interval: any;
   constructor(props: any) {
     super(props);
@@ -216,4 +224,21 @@ class Timer extends Component<{}, TimeState> {
   }
 }
 
-export default Timer;
+const mapStateToProps = (state: ReduxState): StateProps => {
+  return {
+    status: state.status,
+  };
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<TimerActionTypes>, ownProps: {}): DispatchProps => {
+  return {
+    onStop: () => {
+      dispatch(stopTimer())
+    }
+  };
+}
+
+export default connect<StateProps, DispatchProps, {}, ReduxState>(
+  mapStateToProps,
+  mapDispatchToProps
+)(Timer);

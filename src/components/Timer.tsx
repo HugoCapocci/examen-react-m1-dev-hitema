@@ -159,20 +159,7 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onBlur = (unitOfTime: UnitOfTime) => {
-
-    switch (unitOfTime) {
-      case "hours":
-        this.setState({ hours: this.formatTime(parseInt(this.state.hours))})
-        break;
-      case "minutes":
-        this.setState({ minutes: this.formatTime(parseInt(this.state.minutes))})
-        break;
-      case "seconds":
-        this.setState({ seconds: this.formatTime(parseInt(this.state.seconds))})
-        break;
-      default:
-        break;
-    }
+    this.onInputChange(unitOfTime);
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {

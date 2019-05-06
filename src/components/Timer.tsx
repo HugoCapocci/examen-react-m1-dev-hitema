@@ -124,6 +124,7 @@ class Timer extends Component<Props, TimeState, TimerProps> {
       if (!this.canStart()) {
         if (this.state.status === 'started') {
           console.log('cannot start but start called');
+          this.props.onStop();
         }
         return;
       }
@@ -131,7 +132,7 @@ class Timer extends Component<Props, TimeState, TimerProps> {
         return { timeInterval: prevState.timeInterval - 10 };
       });
       if (this.state.timeInterval === 0) {
-        console.log('countdown is over');
+        this.props.onStop();
       }
     }, 10);
   }

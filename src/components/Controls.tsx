@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'; 
 
 export interface ControlsProps {
 }
@@ -14,30 +14,37 @@ class Controls extends Component<ControlsProps & StateProps> {
     status: 'stopped'
   };
 
+  onClicked() { 
+  }
+
   render() {
     return (
       <div>
         <div className="controls">
-          { this.props.status === 'stopped' &&
+          {
+            this.props.status === 'stopped' &&
             <button className="btn btn-success btn-lg btn-block"
-              disabled={!this.props.canStart}>
+              disabled={!this.props.canStart} onClick={this.onClicked}>
               START
             </button>
           }
-          { this.props.status !== 'stopped' &&
-            <div className="controls">
-              {/*
-                <button className="btn btn-danger btn-lg">
-                   STOP
-                </button>
-                <button className="btn btn-success btn-lg">
-                   RESUME
-                </button>
-                <button className="btn btn-primary btn-lg">
-                  PAUSE
-                </button>
-              */}
-            </div>
+          {
+            (this.props.status === 'paused' || this.props.status === 'started') &&
+            <button className="btn btn-danger btn-lg">
+              STOP
+            </button>
+          }
+          {
+            this.props.status === 'started' &&
+            <button className="btn btn-primary btn-lg">
+              PAUSE
+            </button>
+          }
+          {
+            this.props.status === 'paused' &&
+            <button className="btn btn-success btn-lg">
+              RESUME
+            </button>
           }
         </div>
       </div>

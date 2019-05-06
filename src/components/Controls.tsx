@@ -26,17 +26,21 @@ class Controls extends Component<ControlsProps & StateProps> {
           }
           { this.props.status !== 'stopped' &&
             <div className="controls">
-              {/*
-                <button className="btn btn-danger btn-lg">
-                   STOP
-                </button>
-                <button className="btn btn-success btn-lg">
-                   RESUME
-                </button>
+              {this.props.status === 'started' &&
+              <button className="btn btn-danger btn-lg">
+                STOP
+              </button>
+              }
+              {this.props.status === 'paused' &&
+              <button className="btn btn-success btn-lg">
+                RESUME
+              </button>
+              }
+              {this.props.status === 'started' &&
                 <button className="btn btn-primary btn-lg">
                   PAUSE
                 </button>
-              */}
+              }
             </div>
           }
         </div>

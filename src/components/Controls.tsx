@@ -14,29 +14,37 @@ class Controls extends Component<ControlsProps & StateProps> {
     status: 'stopped'
   };
 
+  onClicked() { 
+    // this.StateProps.status = "started";
+  }
+
   render() {
     return (
       <div>
         <div className="controls">
-          { this.props.status === 'stopped' &&
-            <button className="btn btn-success btn-lg btn-block"
+          {this.props.status === 'stopped' &&
+            <button className="btn btn-success btn-lg btn-block" onClick={this.onClicked}
               disabled={!this.props.canStart}>
               START
             </button>
           }
-          { this.props.status !== 'stopped' &&
+          {this.props.status !== 'stopped' &&
             <div className="controls">
-              {/*
+              {(this.props.status === 'started' || this.props.status === 'paused') &&
                 <button className="btn btn-danger btn-lg">
-                   STOP
+                  STOP
                 </button>
+              }
+              {this.props.status === 'paused' &&
                 <button className="btn btn-success btn-lg">
-                   RESUME
+                  RESUME
                 </button>
+              }
+              {this.props.status === 'started' &&
                 <button className="btn btn-primary btn-lg">
                   PAUSE
                 </button>
-              */}
+              }
             </div>
           }
         </div>

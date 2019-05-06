@@ -60,7 +60,7 @@ class Timer extends Component<{}, TimeState> {
         if (hours > 99) {
           hours = parseInt(prevState.hours);
         }
-        return { hours: this.formatTime(hours) };
+        return {hours : this.formatTime(hours)} ;
       });
     }
   }
@@ -129,10 +129,28 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
+    if(isNaN(parseInt(event.currentTarget.value))) return;
+    switch (unitOfTime) {
+      case 'hours' : {
+        if(parseInt(event.currentTarget.value) > 100) return;
+        this.setState({hours : event.currentTarget.value});
+        break;
+      }
+      case 'minutes' : {
+        if(parseInt(event.currentTarget.value) > 60) return;
+        this.setState({minutes : event.currentTarget.value});
+        break;
+      }
+      case 'seconds' : {
+        if(parseInt(event.currentTarget.value) > 60) return;
+        this.setState({seconds: event.currentTarget.value});
+      }
+    }
   }
 
   onBlur = (unitOfTime: UnitOfTime) => {
   }
+
 
   static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {
     if (nextProps.status === prevState.status) return prevState;

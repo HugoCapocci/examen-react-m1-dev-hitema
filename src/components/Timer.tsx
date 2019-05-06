@@ -1,8 +1,16 @@
 import React, { Component, FormEvent } from 'react';
-
+import { ReduxState } from '../store';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { TimerActionTypes } from '../action-types/timer-action-types';
+import { stopTimer } from '../actions/timer-actions';
 import Display from './Display';
 
 export type UnitOfTime = 'hours' | 'minutes' | 'seconds';
+
+export interface TimerProps {
+
+}
 
 export interface TimeState {
   hours: string;
@@ -23,7 +31,7 @@ interface StateProps {
 
 type Props = DispatchProps & StateProps;
 
-class Timer extends Component<{}, TimeState> {
+class Timer extends Component<Props, TimeState, TimerProps> {
   interval: any;
   constructor(props: any) {
     super(props);
@@ -49,6 +57,20 @@ class Timer extends Component<{}, TimeState> {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+  setHours(hours: number) {
+    if (hours < 0) {
+      this.setState(() => ({ hours: '00' }));
+    } else {
+      this.setState((prevState) => {
+        hours = parseInt(this.formatTime(parseInt(prevState.hours) + hours));
+        if (hours > 99) {
+          hours = parseInt(prevState.hours);
+        }
+        return { hours: this.formatTime(hours) };
+      });
+    }
   }
 
   setMinutes(minutes: number) {
@@ -89,20 +111,6 @@ class Timer extends Component<{}, TimeState> {
     }
   }
 
-  setSix(s:number):string{
-    if (s<0){ return '00';}
-    if (s<10){return '0'+s;}
-    if (s<60) {return s.toString()}
-    return '59';
-  }
-
-  setNine(n:number):string{
-    if (n<0){ return '00';}
-    if (n<10){return '0'+n;}
-    if (n<100) {return n.toString()}
-    return '99';
-  }
-
   formatTime(time: number) {
     return time < 10 ? '0' + time : time.toString().slice(time.toString().length - 2);
   }
@@ -129,44 +137,52 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
-    if (!isNaN(parseInt(event.currentTarget.value)))
-    {
-      switch (unitOfTime) {
-        case 'hours':
-           let hours = event.currentTarget.value;
-          this.setState(() => ({ hours: hours }));
-          break;
-        case 'minutes':
-          let minutes = event.currentTarget.value;
-          this.setState(() => ({ minutes: minutes}));
-          break;
-        case 'seconds':
-          let seconds = event.currentTarget.value;
-          this.setState(() => ({ seconds: seconds }));
-          break;
-      }
+
+    let eventValue = event.currentTarget.value;
+
+    switch (unitOfTime) {
+      case "hours":
+        console.log(eventValue);
+        if (!isNaN(parseInt(eventValue)) && parseInt(eventValue) < 100) {
+          this.setState({ hours: eventValue });
+        }
+        break;
+      case "minutes":
+        console.log(eventValue);
+        if (!isNaN(parseInt(eventValue)) && parseInt(eventValue) < 60) {
+          this.setState({ minutes: eventValue });
+        }
+        break;
+      case "seconds":
+        console.log(eventValue);
+        if (!isNaN(parseInt(eventValue)) && parseInt(eventValue) < 60) {
+          this.setState({ seconds: eventValue });
+        }
+        break;
+      default:
+        break;
     }
   }
 
   onBlur = (unitOfTime: UnitOfTime) => {
-    switch (unitOfTime) {
-      case 'hours':
-        let hours = this.setNine(parseInt(this.state.hours));
-        this.setState(() => ({ hours: hours }));
-        break;
-      case 'minutes':
-        let minutes = this.setSix(parseInt(this.state.minutes));
-        this.setState(() => ({ minutes: minutes}));
-        break;
 
-      case 'seconds':
-        let seconds = this.setSix(parseInt(this.state.seconds));
-        this.setState(() => ({ seconds: seconds }));
+    switch (unitOfTime) {
+      case "hours":
+        this.setState({ hours: this.formatTime(parseInt(this.state.hours)) })
+        break;
+      case "minutes":
+        this.setState({ minutes: this.formatTime(parseInt(this.state.minutes)) })
+        break;
+      case "seconds":
+        this.setState({ seconds: this.formatTime(parseInt(this.state.seconds)) })
+        break;
+      default:
         break;
     }
+
   }
 
-  static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {
+  static getDerivedStateFromProps(nextProps: Props, prevState: TimeState): TimeState {
     if (nextProps.status === prevState.status) return prevState;
 
     if (nextProps.status === 'started' && prevState.status !== 'paused') {
@@ -208,4 +224,21 @@ class Timer extends Component<{}, TimeState> {
   }
 }
 
-export default Timer;
+const mapStateToProps = (state: ReduxState): StateProps => {
+  return {
+    status: state.status,
+  };
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<TimerActionTypes>, ownProps: {}): DispatchProps => {
+  return {
+    onStop: () => {
+      dispatch(stopTimer())
+    }
+  };
+}
+
+export default connect<StateProps, DispatchProps, {}, ReduxState>(
+  mapStateToProps,
+  mapDispatchToProps
+)(Timer);

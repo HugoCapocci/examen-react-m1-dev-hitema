@@ -8,6 +8,10 @@ import Display from './Display';
 
 export type UnitOfTime = 'hours' | 'minutes' | 'seconds';
 
+export interface TimerProps {
+
+}
+
 export interface TimeState {
   hours: string;
   minutes: string;

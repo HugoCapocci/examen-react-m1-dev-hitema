@@ -11,25 +11,25 @@ const defaultState: ReduxState = {
 
 function reducer(state = defaultState, action: TimerActionTypes): ReduxState {
   switch(action.type) {
-    case "START_TIMER":
+    case 'START_TIMER':
       return {
-        status: "started"
+        status: 'started',
       };
-    case "PAUSE_TIMER":
-    return {
-      status: "paused"
-    };
-    case "STOP_TIMER":
-    return {
-      status: "stopped"
-    };
-    default: 
+    case 'PAUSE_TIMER':
+      return {
+        status: 'paused',
+      };
+    case 'STOP_TIMER':
+      return {
+        status: 'stopped',
+      };
+    default:
       return state;
   }
 }
 
 const store = createStore(
-  reducer
+    reducer
 );
 
 export default store;

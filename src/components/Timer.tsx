@@ -136,12 +136,12 @@ class Timer extends Component<{}, TimeState> {
         if(parseInt(value) > 100) return;
         this.setState({hours : value});
         break;
-  }
+      }
       case 'minutes' : {
         if(parseInt(value) > 60) return;
         this.setState({minutes : value});
         break;
-  }
+      }
       case 'seconds' : {
         if(parseInt(value) > 60) return;
         this.setState({seconds: value});
@@ -149,7 +149,20 @@ class Timer extends Component<{}, TimeState> {
     }
   }
 
-  onBlur = (unitOfTime: UnitOfTime) => {
+  onBlur = (unitOfTime: UnitOfTime) =>{
+    switch (unitOfTime) {
+      case "hours":
+        this.setState({ hours: this.formatTime(parseInt(this.state.hours))})
+        break;
+      case "minutes":
+        this.setState({ minutes: this.formatTime(parseInt(this.state.minutes))})
+        break;
+      case "seconds":
+        this.setState({ seconds: this.formatTime(parseInt(this.state.seconds))})
+        break;
+      default:
+        break;
+    }
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {

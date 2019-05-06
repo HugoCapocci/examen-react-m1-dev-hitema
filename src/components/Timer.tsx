@@ -51,20 +51,6 @@ class Timer extends Component<{}, TimeState> {
     clearInterval(this.interval);
   }
 
-  setHours(hours: number) {
-    if (hours < 0) {
-      this.setState(() => ({ hours: '00' }));
-    } else {
-      this.setState((prevState) => {
-        hours = parseInt(this.formatTime(parseInt(prevState.hours) + hours));
-        if (hours > 99) {
-          hours = parseInt(prevState.hours);
-        }
-        return { hours: this.formatTime(hours) };
-      });
-    }
-  }
-
   setMinutes(minutes: number) {
     if (minutes < 0) {
       this.setState(() => ({ minutes: '00' }));
@@ -103,6 +89,20 @@ class Timer extends Component<{}, TimeState> {
     }
   }
 
+  setSix(s:number):string{
+    if (s<0){ return '00';}
+    if (s<10){return '0'+s;}
+    if (s<60) {return s.toString()}
+    return '59';
+  }
+
+  setNine(n:number):string{
+    if (n<0){ return '00';}
+    if (n<10){return '0'+n;}
+    if (n<100) {return n.toString()}
+    return '99';
+  }
+
   formatTime(time: number) {
     return time < 10 ? '0' + time : time.toString().slice(time.toString().length - 2);
   }
@@ -129,9 +129,41 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
+    if (!isNaN(parseInt(event.currentTarget.value)))
+    {
+      switch (unitOfTime) {
+        case 'hours':
+           let hours = event.currentTarget.value;
+          this.setState(() => ({ hours: hours }));
+          break;
+        case 'minutes':
+          let minutes = event.currentTarget.value;
+          this.setState(() => ({ minutes: minutes}));
+          break;
+        case 'seconds':
+          let seconds = event.currentTarget.value;
+          this.setState(() => ({ seconds: seconds }));
+          break;
+      }
+    }
   }
 
   onBlur = (unitOfTime: UnitOfTime) => {
+    switch (unitOfTime) {
+      case 'hours':
+        let hours = this.setNine(parseInt(this.state.hours));
+        this.setState(() => ({ hours: hours }));
+        break;
+      case 'minutes':
+        let minutes = this.setSix(parseInt(this.state.minutes));
+        this.setState(() => ({ minutes: minutes}));
+        break;
+
+      case 'seconds':
+        let seconds = this.setSix(parseInt(this.state.seconds));
+        this.setState(() => ({ seconds: seconds }));
+        break;
+    }
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {

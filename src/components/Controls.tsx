@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { TimerActionTypes } from '../action-types/timer-action-types';
+import { ReduxState } from '../store';
+import { startTimer, pauseTimer, stopTimer } from '../actions/timer-actions';
 
 export interface ControlsProps {
 }
@@ -8,11 +13,21 @@ interface StateProps {
   status: 'stopped' | 'paused' | 'started';
 }
 
-class Controls extends Component<ControlsProps & StateProps> {
+interface DispatchProps {
+  ownStartTimer:() => void;
+  ownPauseTimer:() => void;
+  ownStopTimer:() => void;
+}
+
+class Controls extends Component<ControlsProps & StateProps & DispatchProps> {
   static defaultProps: ControlsProps & StateProps = {
     canStart: true,
     status: 'stopped'
   };
+
+  onClicked() {
+    
+  }
 
   render() {
     return (
@@ -20,28 +35,27 @@ class Controls extends Component<ControlsProps & StateProps> {
         <div className="controls">
           {this.props.status === 'stopped' &&
             <button className="btn btn-success btn-lg btn-block"
-              disabled={!this.props.canStart}>
+              disabled={!this.props.canStart} onClick={() => { this.props.ownStartTimer() }}>
               START
             </button>
           }
-          {this.props.status !== 'stopped' &&
-            <div className="controls">
-              {(this.props.status === 'started' || this.props.status === 'paused') &&
-                <button className="btn btn-danger btn-lg">
-                  STOP
-                </button>
-              }
-              {this.props.status === 'paused' &&
-                <button className="btn btn-success btn-lg">
-                  RESUME
-                </button>
-              }
-              {this.props.status === 'started' &&
-                <button className="btn btn-primary btn-lg">
-                  PAUSE
-                </button>
-              }
-            </div>
+          {
+            (this.props.status === 'paused' || this.props.status === 'started') &&
+            <button className="btn btn-danger btn-lg" onClick={() => { this.props.ownStopTimer() }}>
+              STOP
+            </button>
+          }
+          {
+            this.props.status === 'started' &&
+            <button className="btn btn-primary btn-lg" onClick={() => { this.props.ownPauseTimer() }}>
+              PAUSE
+            </button>
+          }
+          {
+            this.props.status === 'paused' &&
+            <button className="btn btn-success btn-lg" onClick={() => { this.props.ownStartTimer() }}>
+              RESUME
+            </button>
           }
         </div>
       </div>
@@ -49,4 +63,28 @@ class Controls extends Component<ControlsProps & StateProps> {
   }
 }
 
-export default Controls;
+const mapStateToProps = (state: ReduxState): StateProps => {
+  return {
+    status: state.status,
+    canStart: true
+  };
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<TimerActionTypes>, ownProps: {}): DispatchProps => {
+  return {
+    ownStartTimer: () => {
+      dispatch(startTimer())
+    },
+    ownPauseTimer: () => {
+      dispatch(pauseTimer())
+    },
+    ownStopTimer: () => {
+      dispatch(stopTimer())
+    }
+  };
+}
+
+export default connect<StateProps, DispatchProps, {}, ReduxState>(
+  mapStateToProps,
+  mapDispatchToProps
+)(Controls);

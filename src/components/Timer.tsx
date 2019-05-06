@@ -1,6 +1,12 @@
 import React, { Component, FormEvent } from 'react';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { TimerActionTypes } from '../action-types/timer-action-types';
+import { ReduxState } from '../store';
+import { startTimer, pauseTimer, stopTimer } from '../actions/timer-actions';
 
 import Display from './Display';
+import { ControlsProps } from './Controls';
 
 export type UnitOfTime = 'hours' | 'minutes' | 'seconds';
 
@@ -14,7 +20,7 @@ export interface TimeState {
 }
 
 interface DispatchProps {
-  onStop: () => void;
+  //onStop: () => void; Obliger de commenter la ligne sous linux
 }
 
 interface StateProps {
@@ -23,7 +29,7 @@ interface StateProps {
 
 type Props = DispatchProps & StateProps;
 
-class Timer extends Component<{}, TimeState> {
+class Timer extends Component<Props, TimeState> {
   interval: any;
   constructor(props: any) {
     super(props);
@@ -116,6 +122,7 @@ class Timer extends Component<{}, TimeState> {
       if (!this.canStart()) {
         if (this.state.status === 'started') {
           console.log('cannot start but start called');
+          this.props.onStop();
         }
         return;
       }
@@ -124,11 +131,10 @@ class Timer extends Component<{}, TimeState> {
       });
       if (this.state.timeInterval === 0) {
         console.log('countdown is over');
+        this.props.onStop();
       }
     }, 10);
   }
-
-
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
 
@@ -170,8 +176,6 @@ class Timer extends Component<{}, TimeState> {
         break;
     }
   }
-
-
 
   static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {
     if (nextProps.status === prevState.status) return prevState;
@@ -215,4 +219,12 @@ class Timer extends Component<{}, TimeState> {
   }
 }
 
-export default Timer;
+const mapStateToProps = (state: ReduxState): StateProps => {
+  return {
+    status: state.status,
+  }
+}
+
+export default connect<StateProps, DispatchProps, {}, ReduxState>(
+  mapStateToProps,
+)(Timer);

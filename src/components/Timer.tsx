@@ -73,9 +73,43 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
+    if(isNaN(Number(event.currentTarget.value)) === false && event.currentTarget.value !== '' ){
+      if(unitOfTime === 'hours')
+          this.setState({hours: event.currentTarget.value})
+      if(unitOfTime === 'minutes')
+          this.setState({minutes: event.currentTarget.value})
+      if(unitOfTime === 'seconds')
+          this.setState({seconds: event.currentTarget.value})
+    }
+    else {
+        if (unitOfTime === 'hours')
+            this.setState({hours: '0'})
+        if (unitOfTime === 'minutes')
+            this.setState({minutes: '0'})
+        if (unitOfTime === 'seconds')
+            this.setState({seconds: '0'})
+    }
+
+    console.log('event.currentTarget.value')
   }
 
   onBlur = (unitOfTime: UnitOfTime) => {
+      if(unitOfTime === 'hours' ){
+          if(parseInt(this.state.hours) < 10)
+              this.setState({hours: '0' + parseInt(this.state.hours)})
+      }
+      if(unitOfTime === 'minutes'){
+          if(parseInt(this.state.minutes) > 59)
+              this.setState({minutes: '59'})
+          if(parseInt(this.state.minutes) < 10)
+              this.setState({minutes: '0' + parseInt(this.state.minutes)})
+      }
+      if(unitOfTime === 'seconds'){
+          if(parseInt(this.state.seconds) > 59)
+              this.setState({seconds: '59'})
+          if(parseInt(this.state.seconds) < 10)
+              this.setState({seconds: '0' + parseInt(this.state.seconds)})
+      }
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {

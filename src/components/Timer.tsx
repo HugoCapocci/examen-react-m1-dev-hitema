@@ -129,12 +129,52 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
+
+    let eventValue = event.currentTarget.value;
+
+    switch (unitOfTime) {
+      case "hours":
+        console.log(eventValue);
+        if (!isNaN(parseInt(eventValue)) && parseInt(eventValue) < 100) {
+          this.setState({ hours: eventValue });
+        }
+        break;
+      case "minutes":
+        console.log(eventValue);
+        if (!isNaN(parseInt(eventValue)) && parseInt(eventValue) < 60) {
+          this.setState({ minutes: eventValue });
+        }
+        break;
+      case "seconds":
+        console.log(eventValue);
+        if (!isNaN(parseInt(eventValue)) && parseInt(eventValue) < 60) {
+          this.setState({ seconds: eventValue });
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   onBlur = (unitOfTime: UnitOfTime) => {
+
+    switch (unitOfTime) {
+      case "hours":
+        this.setState({ hours: this.formatTime(parseInt(this.state.hours)) })
+        break;
+      case "minutes":
+        this.setState({ minutes: this.formatTime(parseInt(this.state.minutes)) })
+        break;
+      case "seconds":
+        this.setState({ seconds: this.formatTime(parseInt(this.state.seconds)) })
+        break;
+      default:
+        break;
+    }
+
   }
 
-  static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {
+  static getDerivedStateFromProps(nextProps: Props, prevState: TimeState): TimeState {
     if (nextProps.status === prevState.status) return prevState;
 
     if (nextProps.status === 'started' && prevState.status !== 'paused') {

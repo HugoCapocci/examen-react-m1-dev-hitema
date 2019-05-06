@@ -45,6 +45,7 @@ class Timer extends Component<{}, TimeState> {
 
   componentDidMount() {
     this.startTimer();
+
   }
 
   componentWillUnmount() {
@@ -52,6 +53,7 @@ class Timer extends Component<{}, TimeState> {
   }
 
   setHours(hours: number) {
+    
     if (hours < 0) {
       this.setState(() => ({ hours: '00' }));
     } else {
@@ -129,9 +131,46 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
+    let value = event.currentTarget.value;
+    if(parseInt(value) > 0)
+    {
+      if(unitOfTime === "hours")
+      {
+        this.setState({hours: value});
+      }else if(unitOfTime === "minutes"){
+        this.setState({minutes: value});
+      }else{
+        this.setState({seconds: value});
+      }
+    }
+    
   }
 
   onBlur = (unitOfTime: UnitOfTime) => {
+
+    switch (unitOfTime) {
+      case "hours":
+        this.setState({ hours: this.formatTime(parseInt(this.state.hours))})
+        break;
+      case "minutes":
+        if(parseInt(this.state.minutes) < 59)
+        {
+          this.setState({ minutes: this.formatTime(parseInt(this.state.minutes))})
+        }else{
+          this.setState({minutes: '59'});
+        }
+        break;
+      case "seconds":
+        if(parseInt(this.state.seconds) < 59)
+        {
+          this.setState({ seconds: this.formatTime(parseInt(this.state.seconds))})
+        }else{
+          this.setState({seconds: '59'});
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {

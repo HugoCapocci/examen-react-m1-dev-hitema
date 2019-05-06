@@ -26,8 +26,9 @@ class Controls extends Component<ControlsProps & StateProps> {
           }
           { this.props.status !== 'stopped' &&
             <div className="controls">
-              {/*
-                <button className="btn btn-danger btn-lg">
+              {
+               <div>
+                 <button className="btn btn-danger btn-lg">
                    STOP
                 </button>
                 <button className="btn btn-success btn-lg">
@@ -36,7 +37,8 @@ class Controls extends Component<ControlsProps & StateProps> {
                 <button className="btn btn-primary btn-lg">
                   PAUSE
                 </button>
-              */}
+                </div> 
+              }
             </div>
           }
         </div>

@@ -25,7 +25,7 @@ class Display extends Component<DisplayProps> {
   render() {
     return (
       <div>
-        { this.props.timeInterval && 
+        { this.props.timeInterval &&
           <div className="display-countdown">
             <div>
               <label className="display-countdown-label">H</label>
@@ -54,7 +54,8 @@ class Display extends Component<DisplayProps> {
                   placeholder="00"
                   onBlur={() => this.props.onBlur('hours')}
                   value={this.props.hours}
-                  onChange={this.props.onInputChange('hours')} />
+                  onChange={this.props.onInputChange('hours')}
+                  min={0} max={99}/>
 
                 <span className="display-time display-separator">:</span>
 
@@ -64,7 +65,8 @@ class Display extends Component<DisplayProps> {
                   placeholder="00"
                   onBlur={() => this.props.onBlur('minutes')}
                   value={this.props.minutes}
-                  onChange={this.props.onInputChange('minutes')} />
+                  onChange={this.props.onInputChange('minutes')}
+                  min={0} max={59}/>
 
                 <span className="display-time display-separator">:</span>
 
@@ -74,7 +76,8 @@ class Display extends Component<DisplayProps> {
                   placeholder="00"
                   onBlur={() => this.props.onBlur('seconds')}
                   value={this.props.seconds}
-                  onChange={this.props.onInputChange('seconds')} />
+                  onChange={this.props.onInputChange('seconds')}
+                  min={0} max={59}/>
               </div>
             </div>
           </div>

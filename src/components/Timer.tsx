@@ -51,6 +51,43 @@ class Timer extends Component<{}, TimeState> {
     clearInterval(this.interval);
   }
 
+  setMinutes(minutes: number) {
+    if (minutes < 0) {
+      this.setState(() => ({ minutes: '00' }));
+    } else {
+      this.setState((prevState) => {
+        minutes = parseInt(this.formatTime(parseInt(prevState.minutes) + minutes));
+        if (minutes < 60) {
+          if (parseInt(minutes.toString()[0]) > 5) {
+            minutes = 59;
+          }
+        } else if (minutes > 59) {
+          minutes = parseInt(minutes.toString().slice(minutes.toString().length - 1));
+        }
+        return { minutes: this.formatTime(minutes) };
+      });
+    }
+  }
+
+  setSeconds(seconds: number) {
+    if (seconds < 0) {
+      this.setState(() => ({ seconds: '00' }));
+    } else {
+      this.setState((prevState) => {
+        seconds = parseInt(this.formatTime(parseInt(prevState.seconds) + seconds));
+
+        if (seconds < 60) {
+          if (parseInt(seconds.toString()[0]) > 5) {
+            seconds = 59;
+          }
+        } else if (seconds > 59) {
+          seconds = parseInt(seconds.toString().slice(seconds.toString().length - 1));
+        }
+
+        return { seconds: this.formatTime(seconds) };
+      });
+    }
+  }
 
   setSix(s:number):string{
     if (s<0){ return '00';}
@@ -116,14 +153,16 @@ class Timer extends Component<{}, TimeState> {
       case 'hours':
         let hours = this.setNine(parseInt(this.state.hours));
         this.setState(() => ({ hours: hours }));
+        break;
       case 'minutes':
         let minutes = this.setSix(parseInt(this.state.minutes));
         this.setState(() => ({ minutes: minutes}));
+        break;
 
       case 'seconds':
         let seconds = this.setSix(parseInt(this.state.seconds));
         this.setState(() => ({ seconds: seconds }));
-
+        break;
     }
   }
 

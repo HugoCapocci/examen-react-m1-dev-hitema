@@ -1,8 +1,16 @@
 import React, { Component, FormEvent } from 'react';
-
+import { ReduxState } from '../store';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { TimerActionTypes } from '../action-types/timer-action-types';
+import { stopTimer } from '../actions/timer-actions';
 import Display from './Display';
 
 export type UnitOfTime = 'hours' | 'minutes' | 'seconds';
+
+export interface TimerProps {
+
+}
 
 export interface TimeState {
   hours: string;
@@ -23,7 +31,7 @@ interface StateProps {
 
 type Props = DispatchProps & StateProps;
 
-class Timer extends Component<{}, TimeState> {
+class Timer extends Component<Props, TimeState, TimerProps> {
   interval: any;
   constructor(props: any) {
     super(props);
@@ -38,8 +46,8 @@ class Timer extends Component<{}, TimeState> {
 
   static getTotalMilliseconds = (state: TimeState) => {
     return (parseInt(state.hours) * 60 * 60
-      + parseInt(state.minutes) * 60
-      + parseInt(state.seconds)
+        + parseInt(state.minutes) * 60
+        + parseInt(state.seconds)
     ) * 1000;
   }
 
@@ -60,7 +68,7 @@ class Timer extends Component<{}, TimeState> {
         if (hours > 99) {
           hours = parseInt(prevState.hours);
         }
-        return {hours : this.formatTime(hours)} ;
+        return { hours: this.formatTime(hours) };
       });
     }
   }
@@ -129,32 +137,52 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
-    if(!isNaN(parseInt(event.currentTarget.value))){
-      switch (unitOfTime) {
-        case 'hours' : {
-          if(parseInt(event.currentTarget.value) < 100) {
-            this.setState({hours: event.currentTarget.value});
-          }
-          break;
+
+    let eventValue = event.currentTarget.value;
+
+    switch (unitOfTime) {
+      case "hours":
+        console.log(eventValue);
+        if (!isNaN(parseInt(eventValue)) && parseInt(eventValue) < 100) {
+          this.setState({ hours: eventValue });
         }
-        case 'minutes' : {
-          if(parseInt(event.currentTarget.value) > 60) return;
-          this.setState({minutes : event.currentTarget.value});
-          break;
+        break;
+      case "minutes":
+        console.log(eventValue);
+        if (!isNaN(parseInt(eventValue)) && parseInt(eventValue) < 60) {
+          this.setState({ minutes: eventValue });
         }
-        case 'seconds' : {
-          if(parseInt(event.currentTarget.value) > 60) return;
-          this.setState({seconds: event.currentTarget.value});
+        break;
+      case "seconds":
+        console.log(eventValue);
+        if (!isNaN(parseInt(eventValue)) && parseInt(eventValue) < 60) {
+          this.setState({ seconds: eventValue });
         }
-      }
+        break;
+      default:
+        break;
     }
   }
 
   onBlur = (unitOfTime: UnitOfTime) => {
+
+    switch (unitOfTime) {
+      case "hours":
+        this.setState({ hours: this.formatTime(parseInt(this.state.hours)) })
+        break;
+      case "minutes":
+        this.setState({ minutes: this.formatTime(parseInt(this.state.minutes)) })
+        break;
+      case "seconds":
+        this.setState({ seconds: this.formatTime(parseInt(this.state.seconds)) })
+        break;
+      default:
+        break;
+    }
+
   }
 
-
-  static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {
+  static getDerivedStateFromProps(nextProps: Props, prevState: TimeState): TimeState {
     if (nextProps.status === prevState.status) return prevState;
 
     if (nextProps.status === 'started' && prevState.status !== 'paused') {
@@ -183,17 +211,34 @@ class Timer extends Component<{}, TimeState> {
 
   render() {
     return (
-      <div className="timer">
-        <Display
-          onBlur={this.onBlur}
-          onInputChange={this.onInputChange}
-          hours={this.state.hours}
-          minutes={this.state.minutes}
-          seconds={this.state.seconds}
-          timeInterval={this.state.timeInterval} />
-      </div>
+        <div className="timer">
+          <Display
+              onBlur={this.onBlur}
+              onInputChange={this.onInputChange}
+              hours={this.state.hours}
+              minutes={this.state.minutes}
+              seconds={this.state.seconds}
+              timeInterval={this.state.timeInterval} />
+        </div>
     );
   }
 }
 
-export default Timer;
+const mapStateToProps = (state: ReduxState): StateProps => {
+  return {
+    status: state.status,
+  };
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<TimerActionTypes>, ownProps: {}): DispatchProps => {
+  return {
+    onStop: () => {
+      dispatch(stopTimer())
+    }
+  };
+}
+
+export default connect<StateProps, DispatchProps, {}, ReduxState>(
+    mapStateToProps,
+    mapDispatchToProps
+)(Timer);

@@ -123,6 +123,7 @@ class Timer extends Component<Props, TimeState> {
       if (!this.canStart()) {
         if (this.state.status === 'started') {
           console.log('cannot start but start called');
+          this.props.onStop();
         }
         return;
       }

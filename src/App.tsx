@@ -3,6 +3,7 @@ import React from 'react';
 import './App.css';
 import Timer from './components/Timer';
 import Controls from './components/Controls';
+import Icon from './components/Icon';
 
 const App: React.FC = () => {
   return (
@@ -10,7 +11,7 @@ const App: React.FC = () => {
       <div className="container mt-5">
         <div className="d-flex flex-row align-items-center">
           <div className="col-md-4 mx-auto">
-            <i className="fas fa-hourglass-half fa-10x"></i>
+            <Icon />
           </div>
           <div className="col-md-4 mx-auto">
             <Timer />

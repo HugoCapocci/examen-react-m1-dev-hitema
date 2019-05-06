@@ -1,4 +1,4 @@
-import React, { Component, MouseEvent } from 'react';
+import React, { Component } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { TimerActionTypes } from '../action-types/timer-action-types';
@@ -6,12 +6,6 @@ import { startTimer, stopTimer, pauseTimer } from '../actions/timer-actions';
 import { ReduxState } from '../store';
 
 export interface ControlsProps {
-  // onStart: (event: MouseEvent<HTMLButtonElement>) => void,
-  // onStop: (event: MouseEvent<HTMLButtonElement>) => void,
-  onReset: (event: MouseEvent<HTMLButtonElement>) => void;
-  onResume: (event: MouseEvent<HTMLButtonElement>) => void;
-  // canStart: boolean;
-  // status: string | null;
 }
 
 interface DispatchProps {
@@ -27,10 +21,6 @@ interface StateProps {
 
 class Controls extends Component<ControlsProps & DispatchProps & StateProps> {
   static defaultProps: ControlsProps & StateProps = {
-    // onStart: () => console.log('CONTROLS: START'),
-    // onStop: () => console.log('CONTROLS: STOP'),
-    onResume: () => console.log('CONTROLS: RESUME'),
-    onReset: () => console.log('CONTROLS: RESET'),
     canStart: true,
     status: 'stopped'
   };

@@ -1,6 +1,11 @@
 import React, { Component, FormEvent } from 'react';
-
 import Display from './Display';
+
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { TimerActionTypes } from '../action-types/timer-action-types';
+import { ReduxState } from '../store';
+
 
 export type UnitOfTime = 'hours' | 'minutes' | 'seconds';
 
@@ -14,7 +19,7 @@ export interface TimeState {
 }
 
 interface DispatchProps {
-  onStop: () => void;
+  //onStop: () => void; Obligé de commenter la ligne sur Linux, le stop marche bien sur windows
 }
 
 interface StateProps {
@@ -23,7 +28,8 @@ interface StateProps {
 
 type Props = DispatchProps & StateProps;
 
-class Timer extends Component<{}, TimeState> {
+class Timer extends Component<Props, TimeState> {
+  
   interval: any;
   constructor(props: any) {
     super(props);
@@ -45,7 +51,7 @@ class Timer extends Component<{}, TimeState> {
 
   componentDidMount() {
     this.startTimer();
-
+    
   }
 
   componentWillUnmount() {
@@ -118,6 +124,7 @@ class Timer extends Component<{}, TimeState> {
       if (!this.canStart()) {
         if (this.state.status === 'started') {
           console.log('cannot start but start called');
+          //this.props.onStop(); Fonctionne sur Widows mais pas Linux
         }
         return;
       }
@@ -126,6 +133,7 @@ class Timer extends Component<{}, TimeState> {
       });
       if (this.state.timeInterval === 0) {
         console.log('countdown is over');
+        //this.props.onStop(); Fonctionne sur Widows mais pas Linux
       }
     }, 10);
   }
@@ -215,4 +223,11 @@ class Timer extends Component<{}, TimeState> {
   }
 }
 
-export default Timer;
+const mapStateToProps = (state: ReduxState): StateProps => {
+  return {
+    status: state.status,
+  };
+}
+export default connect<StateProps, DispatchProps, {}, ReduxState>(
+  mapStateToProps,
+)(Timer);

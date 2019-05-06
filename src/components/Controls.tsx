@@ -25,9 +25,6 @@ class Controls extends Component<ControlsProps & StateProps & DispatchProps> {
     status: 'stopped'
   };
 
-  onClicked() {
-    
-  }
 
   render() {
     return (
@@ -41,7 +38,7 @@ class Controls extends Component<ControlsProps & StateProps & DispatchProps> {
           }
           {
             (this.props.status === 'paused' || this.props.status === 'started') &&
-            <button className="btn btn-danger btn-lg" onClick={() => { this.props.ownPauseTimer() }} >
+            <button className="btn btn-danger btn-lg" onClick={() => { this.props.ownStopTimer() }} >
               STOP
             </button>
           }

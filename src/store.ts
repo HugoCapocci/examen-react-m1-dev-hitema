@@ -1,6 +1,5 @@
 import { createStore } from 'redux';
 import {  TimerActionTypes  } from './action-types/timer-action-types';
-
 export interface ReduxState {
   status: 'stopped' | 'paused' | 'started';
 }
@@ -14,6 +13,7 @@ function reducer(state = defaultState, action: TimerActionTypes): ReduxState {
     case "START_TIMER":
       return {
         status: "started"
+        
       };
     case "PAUSE_TIMER":
     return {

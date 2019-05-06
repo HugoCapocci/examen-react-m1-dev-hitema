@@ -14,6 +14,8 @@ export interface TimeState {
 }
 
 interface DispatchProps {
+  onStart: () => void;
+  onPause: () => void;
   onStop: () => void;
 }
 
@@ -52,6 +54,7 @@ class Timer extends Component<{}, TimeState> {
   }
 
   setHours(hours: number) {
+    console.log(hours);
     if (hours < 0) {
       this.setState(() => ({ hours: '00' }));
     } else {
@@ -129,10 +132,43 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
-  }
+
+    const re = /^[0-9\b]+$/;
+    let inputValue = event.currentTarget.value;
+
+    if(re.test(inputValue))
+    {
+      if(unitOfTime === 'hours')
+      {
+        if(parseInt(inputValue) < 100)
+          this.setState(() => ({ hours: inputValue }));
+        else
+          this.setState(() => ({ hours: '99' }));
+
+      }
+      if(unitOfTime === 'minutes')
+      {
+        if(parseInt(inputValue) < 60)
+          this.setState(() => ({ minutes: inputValue }));
+        else
+          this.setState(() => ({ minutes: '59' }));
+      }
+
+      if(unitOfTime === 'seconds')
+      {
+        if(parseInt(inputValue) < 60)
+          this.setState(() => ({ seconds: inputValue }));
+        else
+          this.setState(() => ({ seconds: '59' }));
+      }
+
+    }
+
+  };
 
   onBlur = (unitOfTime: UnitOfTime) => {
-  }
+    this.onInputChange(unitOfTime);
+  };
 
   static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {
     if (nextProps.status === prevState.status) return prevState;

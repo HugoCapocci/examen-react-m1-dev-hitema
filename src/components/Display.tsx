@@ -49,12 +49,13 @@ class Display extends Component<DisplayProps> {
 
               <div className="input-group input-group-lg display-input-group">
                 <input type="text"
-                  className="form-control display-time display-hours"
-                  maxLength={2}
-                  placeholder="00"
-                  onBlur={() => this.props.onBlur('hours')}
-                  value={this.props.hours}
-                  onChange={this.props.onInputChange('hours')} />
+                       className="form-control display-time display-hours"
+                       maxLength={2}
+                       placeholder="00"
+                       onBlur={() => this.props.onBlur('hours')}
+                       value={this.props.hours}
+                       onChange={this.props.onInputChange('hours')}
+                       />
 
                 <span className="display-time display-separator">:</span>
 
@@ -64,7 +65,8 @@ class Display extends Component<DisplayProps> {
                   placeholder="00"
                   onBlur={() => this.props.onBlur('minutes')}
                   value={this.props.minutes}
-                  onChange={this.props.onInputChange('minutes')} />
+                  onChange={this.props.onInputChange('minutes')}
+                />
 
                 <span className="display-time display-separator">:</span>
 
@@ -74,7 +76,8 @@ class Display extends Component<DisplayProps> {
                   placeholder="00"
                   onBlur={() => this.props.onBlur('seconds')}
                   value={this.props.seconds}
-                  onChange={this.props.onInputChange('seconds')} />
+                  onChange={this.props.onInputChange('seconds')}
+                  />
               </div>
             </div>
           </div>

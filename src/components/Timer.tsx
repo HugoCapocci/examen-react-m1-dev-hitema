@@ -51,62 +51,6 @@ class Timer extends Component<{}, TimeState> {
     clearInterval(this.interval);
   }
 
-  setHours(hours: number) {
-    if (hours < 0) {
-      this.setState(() => ({ hours: '00' }));
-    } else {
-      this.setState((prevState) => {
-        hours = parseInt(this.formatTime(parseInt(prevState.hours) + hours));
-        if (hours > 99) {
-          hours = parseInt(prevState.hours);
-        }
-        return { hours: this.formatTime(hours) };
-      });
-    }
-  }
-
-  setMinutes(minutes: number) {
-    if (minutes < 0) {
-      this.setState(() => ({ minutes: '00' }));
-    } else {
-      this.setState((prevState) => {
-        minutes = parseInt(this.formatTime(parseInt(prevState.minutes) + minutes));
-        if (minutes < 60) {
-          if (parseInt(minutes.toString()[0]) > 5) {
-            minutes = 59;
-          }
-        } else if (minutes > 59) {
-          minutes = parseInt(minutes.toString().slice(minutes.toString().length - 1));
-        }
-        return { minutes: this.formatTime(minutes) };
-      });
-    }
-  }
-
-  setSeconds(seconds: number) {
-    if (seconds < 0) {
-      this.setState(() => ({ seconds: '00' }));
-    } else {
-      this.setState((prevState) => {
-        seconds = parseInt(this.formatTime(parseInt(prevState.seconds) + seconds));
-
-        if (seconds < 60) {
-          if (parseInt(seconds.toString()[0]) > 5) {
-            seconds = 59;
-          }
-        } else if (seconds > 59) {
-          seconds = parseInt(seconds.toString().slice(seconds.toString().length - 1));
-        }
-
-        return { seconds: this.formatTime(seconds) };
-      });
-    }
-  }
-
-  formatTime(time: number) {
-    return time < 10 ? '0' + time : time.toString().slice(time.toString().length - 2);
-  }
-
   canStart() {
     return this.state.status === 'started' && this.state.timeInterval > 0;
   }

@@ -1,8 +1,6 @@
 import React, { Component, FormEvent } from 'react';
 
 import Display from './Display';
-import {isNumberLiteral, isNumericLiteral, isTSNumberKeyword} from "@babel/types";
-import {number} from "prop-types";
 
 export type UnitOfTime = 'hours' | 'minutes' | 'seconds';
 
@@ -40,8 +38,8 @@ class Timer extends Component<{}, TimeState> {
 
   static getTotalMilliseconds = (state: TimeState) => {
     return (parseInt(state.hours) * 60 * 60
-      + parseInt(state.minutes) * 60
-      + parseInt(state.seconds)
+        + parseInt(state.minutes) * 60
+        + parseInt(state.seconds)
     ) * 1000;
   }
 
@@ -131,28 +129,27 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
-
-    const valeur =event.currentTarget.value;
-
-    if(unitOfTime === "minutes" && parseInt(valeur) <60){
-      console.log(valeur);
-      this.setState({minutes:valeur});
-    }
-
-    else if(unitOfTime === "hours" && parseInt(valeur) <99){
-      console.log(valeur);
-      this.setState({hours:valeur});
-    }
-
-    else if(unitOfTime === "seconds" && parseInt(valeur) <60){
-      console.log(valeur);
-      this.setState({seconds:valeur});
-    }
-    else{ return ;
+    let value = event.currentTarget.value;
+    if(isNaN(parseInt(value))) return;
+    switch (unitOfTime) {
+      case 'hours' : {
+        if(parseInt(value) > 100) return;
+        this.setState({hours : value});
+        break;
+      }
+      case 'minutes' : {
+        if(parseInt(value) > 60) return;
+        this.setState({minutes : value});
+        break;
+      }
+      case 'seconds' : {
+        if(parseInt(value) > 60) return;
+        this.setState({seconds: value});
+      }
     }
   }
 
-  onBlur = (unitOfTime: UnitOfTime) => {
+  onBlur = (unitOfTime: UnitOfTime) =>{
     switch (unitOfTime) {
       case "hours":
         this.setState({ hours: this.formatTime(parseInt(this.state.hours))})
@@ -197,15 +194,15 @@ class Timer extends Component<{}, TimeState> {
 
   render() {
     return (
-      <div className="timer">
-        <Display
-          onBlur={this.onBlur}
-          onInputChange={this.onInputChange}
-          hours={this.state.hours}
-          minutes={this.state.minutes}
-          seconds={this.state.seconds}
-          timeInterval={this.state.timeInterval} />
-      </div>
+        <div className="timer">
+          <Display
+              onBlur={this.onBlur}
+              onInputChange={this.onInputChange}
+              hours={this.state.hours}
+              minutes={this.state.minutes}
+              seconds={this.state.seconds}
+              timeInterval={this.state.timeInterval} />
+        </div>
     );
   }
 }

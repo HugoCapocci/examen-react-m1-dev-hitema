@@ -18,6 +18,7 @@ function reducer(state = defaultState, action: TimerActionTypes): ReduxState {
 
 const store = createStore(
   reducer
+  
 );
 
 export default store;

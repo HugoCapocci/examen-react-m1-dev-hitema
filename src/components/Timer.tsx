@@ -129,9 +129,43 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
+    let eventValeur = event.currentTarget.value;
+    switch (unitOfTime) {
+      case "hours":
+        console.log(eventValeur);
+        if (!isNaN(parseInt(eventValeur)) && parseInt(eventValeur) < 100) {
+          this.setState({ hours: eventValeur });
+        }
+        break;
+      case "minutes":
+        console.log(eventValeur);
+        if (!isNaN(parseInt(eventValeur)) && parseInt(eventValeur) < 60) {
+          this.setState({ minutes: eventValeur });
+        }
+        break;
+      case "seconds":
+        console.log(eventValeur);
+        if (!isNaN(parseInt(eventValeur)) && parseInt(eventValeur) < 60) {
+          this.setState({ seconds: eventValeur });
+        }
+        break;
+    }
   }
 
   onBlur = (unitOfTime: UnitOfTime) => {
+    switch (unitOfTime) {
+      case "hours":
+        this.setState({ hours: this.formatTime(parseInt(this.state.hours))})
+        break;
+      case "minutes":
+        this.setState({ minutes: this.formatTime(parseInt(this.state.minutes))})
+        break;
+      case "seconds":
+        this.setState({ seconds: this.formatTime(parseInt(this.state.seconds))})
+        break;
+      default:
+        break;
+    }
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {

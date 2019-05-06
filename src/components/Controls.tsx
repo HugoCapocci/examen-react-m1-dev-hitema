@@ -9,9 +9,9 @@ export interface ControlsProps {
 }
 
 interface DispatchProps{
-  ownStartTimer:() => void ;
-  ownPauseTimer:() => void ;
-  ownStopTimer:() => void ;
+  ownStartTimer:() => void,
+  ownPauseTimer:() => void,
+  ownStopTimer:() => void;
 }
 interface StateProps {
   canStart: boolean;
@@ -35,25 +35,25 @@ class Controls extends Component<ControlsProps & StateProps & DispatchProps> {
         <div className="controls">
           {this.props.status === 'stopped' &&
             <button className="btn btn-success btn-lg btn-block"
-              disabled={!this.props.canStart} onClick={() => { this.props.ownStartTimer() }}>
+              disabled={!this.props.canStart} onClick={this.props.ownStartTimer}>
               START
             </button>
           }
           {
             (this.props.status === 'paused' || this.props.status === 'started') &&
-            <button className="btn btn-danger btn-lg" onClick={() => { this.props.ownPauseTimer() }} >
+            <button className="btn btn-danger btn-lg"  onClick={this.props.ownStopTimer} >
               STOP
             </button>
           }
           {
             this.props.status === 'started' &&
-            <button className="btn btn-primary btn-lg" onClick={() => { this.props.ownPauseTimer() }}>
+            <button className="btn btn-primary btn-lg" onClick={this.props.ownPauseTimer}>
               PAUSE
             </button>
           }
           {
             this.props.status === 'paused' &&
-            <button className="btn btn-success btn-lg" onClick={() => { this.props.ownStartTimer() }}>
+            <button className="btn btn-success btn-lg" onClick={this.props.ownStartTimer}>
               RESUME
             </button>
           }
@@ -64,9 +64,11 @@ class Controls extends Component<ControlsProps & StateProps & DispatchProps> {
 }
 
 const mapStateToProps = (state: ReduxState): StateProps => {
+  let isStarted = false;
+  if(state.status === 'started') isStarted = true;
   return {
     status: state.status,
-    canStart: true
+    canStart: !isStarted
   };
 }
 

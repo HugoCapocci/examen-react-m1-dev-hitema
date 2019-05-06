@@ -1,8 +1,16 @@
 import React, { Component, FormEvent } from 'react';
-
+import { ReduxState } from '../store';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { TimerActionTypes } from '../action-types/timer-action-types';
+import { stopTimer } from '../actions/timer-actions';
 import Display from './Display';
 
 export type UnitOfTime = 'hours' | 'minutes' | 'seconds';
+
+export interface TimerProps {
+
+}
 
 export interface TimeState {
   hours: string;
@@ -23,7 +31,7 @@ interface StateProps {
 
 type Props = DispatchProps & StateProps;
 
-class Timer extends Component<{}, TimeState> {
+class Timer extends Component<Props, TimeState> {
   interval: any;
   constructor(props: any) {
     super(props);
@@ -129,9 +137,9 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
-    
+
     let eventValue = event.currentTarget.value;
-    
+
     switch (unitOfTime) {
       case "hours":
         console.log(eventValue);
@@ -157,22 +165,24 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onBlur = (unitOfTime: UnitOfTime) => {
+
     switch (unitOfTime) {
       case "hours":
-        this.setState({ hours: this.formatTime(parseInt(this.state.hours))})
+        this.setState({ hours: this.formatTime(parseInt(this.state.hours)) })
         break;
       case "minutes":
-        this.setState({ minutes: this.formatTime(parseInt(this.state.minutes))})
+        this.setState({ minutes: this.formatTime(parseInt(this.state.minutes)) })
         break;
       case "seconds":
-        this.setState({ seconds: this.formatTime(parseInt(this.state.seconds))})
+        this.setState({ seconds: this.formatTime(parseInt(this.state.seconds)) })
         break;
       default:
         break;
     }
+
   }
 
-  static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {
+  static getDerivedStateFromProps(nextProps: Props, prevState: TimeState): TimeState {
     if (nextProps.status === prevState.status) return prevState;
 
     if (nextProps.status === 'started' && prevState.status !== 'paused') {
@@ -214,4 +224,21 @@ class Timer extends Component<{}, TimeState> {
   }
 }
 
-export default Timer;
+const mapStateToProps = (state: ReduxState): StateProps => {
+  return {
+    status: state.status,
+  };
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<TimerActionTypes>, ownProps: {}): DispatchProps => {
+  return {
+    onStop: () => {
+      dispatch(stopTimer())
+    }
+  };
+}
+
+export default connect<StateProps, DispatchProps, {}, ReduxState>(
+  mapStateToProps,
+  mapDispatchToProps
+)(Timer);

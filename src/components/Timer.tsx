@@ -18,7 +18,7 @@ export interface TimeState {
 }
 
 interface DispatchProps {
-  // onStop: () => void;
+  onStop: () => void;
 }
 
 interface StateProps {
@@ -36,8 +36,7 @@ class Timer extends Component<Props, TimeState> {
       minutes: '01',
       seconds: '00',
       timeInterval: null,
-      status: 'stopped',
-      // onStop: () => {}
+      status: 'stopped'
     };
   }
 
@@ -69,6 +68,7 @@ class Timer extends Component<Props, TimeState> {
       if (!this.canStart()) {
         if (this.state.status === 'started') {
           console.log('cannot start but start called');
+          this.props.onStop();
         }
         return;
       }
@@ -77,6 +77,7 @@ class Timer extends Component<Props, TimeState> {
       });
       if (this.state.timeInterval === 0) {
         console.log('countdown is over');
+        this.props.onStop();
       }
     }, 10);
   }

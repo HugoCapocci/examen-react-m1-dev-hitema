@@ -1,6 +1,8 @@
 import React, { Component, FormEvent } from 'react';
 
 import Display from './Display';
+import {isNumberLiteral, isNumericLiteral, isTSNumberKeyword} from "@babel/types";
+import {number} from "prop-types";
 
 export type UnitOfTime = 'hours' | 'minutes' | 'seconds';
 
@@ -129,9 +131,41 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
+
+    const valeur =event.currentTarget.value;
+
+    if(unitOfTime === "minutes" && parseInt(valeur) <60){
+      console.log(valeur);
+      this.setState({minutes:valeur});
+    }
+
+    else if(unitOfTime === "hours" && parseInt(valeur) <99){
+      console.log(valeur);
+      this.setState({hours:valeur});
+    }
+
+    else if(unitOfTime === "seconds" && parseInt(valeur) <60){
+      console.log(valeur);
+      this.setState({seconds:valeur});
+    }
+    else{ return ;
+    }
   }
 
   onBlur = (unitOfTime: UnitOfTime) => {
+    switch (unitOfTime) {
+      case "hours":
+        this.setState({ hours: this.formatTime(parseInt(this.state.hours))})
+        break;
+      case "minutes":
+        this.setState({ minutes: this.formatTime(parseInt(this.state.minutes))})
+        break;
+      case "seconds":
+        this.setState({ seconds: this.formatTime(parseInt(this.state.seconds))})
+        break;
+      default:
+        break;
+    }
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: TimeState) : TimeState {

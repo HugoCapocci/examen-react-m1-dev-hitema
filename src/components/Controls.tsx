@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ReduxState } from '../store';
 
 export interface ControlsProps {
 }
@@ -26,7 +27,7 @@ class Controls extends Component<ControlsProps & StateProps> {
           }
           { this.props.status !== 'stopped' &&
             <div className="controls">
-              {this.props.status === 'started' &&
+              {(this.props.status === 'started' || this.props.status ==='paused') &&
               <button className="btn btn-danger btn-lg">
                 STOP
               </button>
@@ -48,5 +49,4 @@ class Controls extends Component<ControlsProps & StateProps> {
     );
   }
 }
-
 export default Controls;

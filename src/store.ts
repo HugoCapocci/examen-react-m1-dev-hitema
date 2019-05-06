@@ -11,6 +11,18 @@ const defaultState: ReduxState = {
 
 function reducer(state = defaultState, action: TimerActionTypes): ReduxState {
   switch(action.type) {
+    case 'START_TIMER':
+    return {
+      status: 'started',
+    };
+    case 'PAUSE_TIMER':
+    return {
+      status: 'paused',
+    };
+    case 'STOP_TIMER':
+    return {
+      status: 'stopped',
+    };
     default: 
       return state;
   }

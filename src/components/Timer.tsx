@@ -129,22 +129,30 @@ class Timer extends Component<{}, TimeState> {
   }
 
   onInputChange = (unitOfTime: UnitOfTime) => (event: FormEvent<HTMLInputElement>) => {
-    if(isNaN(parseInt(event.currentTarget.value))) return;
+    
+    let eventValue = event.currentTarget.value;
+    
     switch (unitOfTime) {
-      case 'hours' : {
-        if(parseInt(event.currentTarget.value) > 100) return;
-        this.setState({hours : event.currentTarget.value});
+      case "hours":
+        console.log(eventValue);
+        if (!isNaN(parseInt(eventValue)) && parseInt(eventValue) < 100) {
+          this.setState({ hours: eventValue });
+        }
         break;
-      }
-      case 'minutes' : {
-        if(parseInt(event.currentTarget.value) > 60) return;
-        this.setState({minutes : event.currentTarget.value});
+      case "minutes":
+        console.log(eventValue);
+        if (!isNaN(parseInt(eventValue)) && parseInt(eventValue) < 60) {
+          this.setState({ minutes: eventValue });
+        }
         break;
-      }
-      case 'seconds' : {
-        if(parseInt(event.currentTarget.value) > 60) return;
-        this.setState({seconds: event.currentTarget.value});
-      }
+      case "seconds":
+        console.log(eventValue);
+        if (!isNaN(parseInt(eventValue)) && parseInt(eventValue) < 60) {
+          this.setState({ seconds: eventValue });
+        }
+        break;
+      default:
+        break;
     }
   }
 
